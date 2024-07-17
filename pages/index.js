@@ -1,7 +1,21 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [helloMessage, setHelloMessage] = useState('');
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    fetch('/api/hello')
+      .then((res) => res.json())
+      .then((data) => setHelloMessage(data.message));
+
+    fetch('/api/time')
+      .then((res) => res.json())
+      .then((data) => setCurrentTime(data.time));
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -46,6 +60,18 @@ export default function Home() {
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
           </a>
+        </div>
+
+        <div className={styles.grid}>
+          <div className={styles.card}>
+            <h3>Hello Message &rarr;</h3>
+            <p>{helloMessage}</p>
+          </div>
+
+          <div className={styles.card}>
+            <h3>Current Time &rarr;</h3>
+            <p>{currentTime}</p>
+          </div>
         </div>
       </main>
 
